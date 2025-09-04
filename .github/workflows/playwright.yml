@@ -1,0 +1,1 @@
+name: Playwright Tests\n\non: [push]\n\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v2\n      - run: echo 'Run tests here'
