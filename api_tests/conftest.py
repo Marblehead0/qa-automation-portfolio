@@ -8,3 +8,7 @@ def base_url():
 @pytest.fixture(scope="session")
 def client(base_url):
     return APIClient(base_url)
+
+@pytest.fixture(scope="session")
+def pokeapi_client():
+    return APIClient("https://pokeapi.co/api/v2")

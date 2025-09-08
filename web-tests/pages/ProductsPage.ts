@@ -6,12 +6,16 @@ export class ProductsPage{
     private title: locator;
     private addToCartButton: locator;
     private cartBadge: locator;
+    private burgerMenu : locator;
+    private logoutLink : locator;   
 
     constructor(page: page){
         this.page = page;
         this.title = page.locator(".title");
         this.addToCartButton = page.locator('[data-test^="add-to-cart"]');
         this.cartBadge = page.locator(".shopping_cart_badge");
+        this.burgerMenu = page.locator("#react-burger-menu-btn");
+        this.logoutLink = page.locator("#logout_sidebar_link");
     }
 
     async expectOnPage(){
@@ -31,6 +35,12 @@ export class ProductsPage{
     async addItemTocartByName(name: string){
         const item = this.page.locator(".inventory_item").filter({hasText: name});
         await item.locator('[data-test^="add-to-cart"]').click();
+    }
+
+    async logout(){
+        await this.burgerMenu.click();
+        await this.logoutLink.waitFor({state: 'visible'});
+        await this.logoutLink.click();
     }
 }
 
