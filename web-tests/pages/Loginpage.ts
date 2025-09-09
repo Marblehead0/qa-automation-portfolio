@@ -1,6 +1,6 @@
 import {page, locator, expect} from '@playwright/test';
 
-export class Loginpage{
+export class LoginPage{
 
     private page: page;
     private usernameInput: locator;
@@ -10,14 +10,14 @@ export class Loginpage{
 
     constructor(page: page){
         this.page = page;
-        this.usernameInput = page.locator("#user-name");
-        this.passwordInput = page.locator("#password");
-        this.loginButton = page.locator('[data-test="login-button"]');
+        this.usernameInput = page.getByPlaceholder("username");
+        this.passwordInput = page.getByPlaceholder("password");
+        this.loginButton = page.getByRole("button", {name: "Login"});
         this.errorMessage = page.locator("[data-test='error']");
     }
 
     async goto(){
-        await this.page.goto("https://www.saucedemo.com/");
+        await this.page.goto("/");
     }
 
     async login(username: string, password: string){

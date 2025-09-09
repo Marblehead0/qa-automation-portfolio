@@ -17,5 +17,25 @@ It includes:
 - ✅ CI/CD integration via **GitHub Actions**
 - ✅ Coverage reporting with pytest-cov
 
+## 🐞 Debugging & Reports
+
+### Playwright (Web)
+- Run tests: `cd web-tests && npx playwright test`
+- HTML report: `npx playwright show-report`
+- Headed mode (see browser): `npx playwright test --headed`
+- Debug mode (inspector): `npx playwright test --debug`
+- Trace viewer (on retries): `npx playwright show-trace test-results/**/trace.zip`
+
+Artifacts on failures:
+- Screenshots (`only-on-failure`)
+- Videos (`retain-on-failure`)
+- Traces (`on-first-retry`)
+
+### Pytest (API)
+- With coverage + HTML report:
+  ```bash
+  python -m pytest api_tests --cov=api_tests --cov-report=term-missing \
+    --html=api-report.html --self-contained-html
+
 
 

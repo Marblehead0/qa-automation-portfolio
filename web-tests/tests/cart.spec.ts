@@ -1,15 +1,16 @@
 import {test} from "@playwright/test";
-import {Loginpage} from "../pages/Loginpage";
+import {LoginPage} from "../pages/LoginPage";
 import {ProductsPage} from "../pages/ProductsPage";
 import {CartPage} from "../pages/CartPage";
+import { CREDS } from "./helpers/creds";
 
 test("user can see product and see it in the cart", async ({page})=>{
-    const login = new Loginpage(page);
+    const login = new LoginPage(page);
     const product = new ProductsPage(page);
     const cart = new CartPage(page);
 
     await login.goto();
-    await login.login("standard_user","secret_sauce");
+    await login.login(CREDS.user, CREDS.pass);
     await product.expectOnPage();
 
     await product.addItemTocartByName("Sauce Labs Backpack");

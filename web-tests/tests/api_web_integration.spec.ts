@@ -1,6 +1,7 @@
 import {test, expect} from "@playwright/test";
 import fetch from "node-fetch";
-import Loginpage = require("../pages/Loginpage");
+import LoginPage = require("../pages/LoginPage");
+import { CREDS } from "./helpers/creds";
 
 test("Pokemon name matches between API and UI demo", async ({page})=>{
     const response = await fetch("https://pokeapi.co/api/v2/pokemon/1");
@@ -8,9 +9,9 @@ test("Pokemon name matches between API and UI demo", async ({page})=>{
     const apiName = data.name;
     console.log(`API name: ${apiName}`);
 
-    const loginpage = new Loginpage.Loginpage(page);
+    const loginpage = new LoginPage.LoginPage(page);
     await loginpage.goto();
-    await loginpage.login("standard_user","secret_sauce");
+    await loginpage.login(CREDS.user, CREDS.pass);
 
     expect(apiName).toBe("bulbasaur");
 });

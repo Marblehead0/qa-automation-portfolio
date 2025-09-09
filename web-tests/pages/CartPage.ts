@@ -10,8 +10,7 @@ export class CartPage{
 
     constructor(page: page){
         this.page = page;
-        this.cartLink = page.locator(".shopping_cart_link");
-    
+        this.cartLink  = page.getByRole("link", { name: "Shopping Cart" }).or(page.locator(".shopping_cart_link"));
         this.cartItems = page.locator(".cart_item");
         this.cartbadge = page.locator(".shopping_cart_badge");
         this.checkoutButton = page.locator('[data-test^="checkout"]');
@@ -29,7 +28,7 @@ export class CartPage{
 
     async removeItemByName(productName:string){
         const item = this.cartItems.filter({hasText: productName});
-        const removeBtn = item.locator('[data-test^="remove-"], button:has-text("Remove")');
+        const removeBtn = item.getByRole("button", {name: /remove/i});
         await removeBtn.click();
     }   
 
@@ -41,4 +40,13 @@ export class CartPage{
     async startCheckout(){
         await this.checkoutButton.click();  
     }
+
+    async expectCartCount(expected: number){
+    
+        const visible = await this.cartbadge.isVisible();
+        const count = visible ? parseInt(await this.cartbadge.textContent() || "0",10) : 0;
+        expect(count).toBe(expected);
+    }
+
+    
 }

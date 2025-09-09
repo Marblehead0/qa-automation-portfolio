@@ -33,14 +33,34 @@ export class ProductsPage{
     }
 
     async addItemTocartByName(name: string){
-        const item = this.page.locator(".inventory_item").filter({hasText: name});
-        await item.locator('[data-test^="add-to-cart"]').click();
+        const row = this.page.locator(".inventory_item").filter({hasText: name});
+        await row.getByRole("button",{name: "Add to cart"}).click();
     }
 
-    async logout(){
-        await this.burgerMenu.click();
-        await this.logoutLink.waitFor({state: 'visible'});
-        await this.logoutLink.click();
+
+    async getCartCount(): Promise<number>{
+        const visible = await this.cartBadge.isVisible();
+        if(!visible) return 0;
+        const txt = (await this.cartBadge.textContent())?.trim() ?? "0"; 
+        return Number(txt);
     }
+
+    async expectCartCount(n: number){
+        if(n === 0 ){
+            await expect(this.cartBadge).toBeHidden();
+        }
+        else
+        {
+            await expect(this.cartBadge).toHaveText(String(n));
+        }
+    }
+
+    
+  async logout() {
+    await this.burgerMenu.click();
+    await this.logoutLink.click();
+  }
+    
+
 }
 
