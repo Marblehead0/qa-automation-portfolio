@@ -1,5 +1,5 @@
-import { test, expect } from "../fixtures/pom_fixtures";
-import { CREDS } from "./helpers/creds";
+import { test, expect } from "fixtures/pom_fixtures";
+import { CREDS } from "helpers/creds";
 
 test.describe("Cart flow", () => {
     test("user can see product and see it in the cart", async ({ login, product, cart, }) => {

@@ -10,6 +10,7 @@
     "module": "nodenext",
     "target": "esnext",
     "types": ["node"],
+    "baseUrl": "./",
     // For nodejs:
     // "lib": ["esnext"],
     // "types": ["node"],
@@ -40,6 +41,11 @@
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "skipLibCheck": true,
+    "paths":{
+      "pages/*":["pages/*"],
+      "fixtures/*":["fixtures/*"],
+      "helpers/*":["helpers/*"]
+    }
   },
     "include": ["**/*.ts"]
 }

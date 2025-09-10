@@ -1,8 +1,8 @@
 import { test as base, expect } from "@playwright/test";
-import { LoginPage } from "../pages/LoginPage";
-import { ProductsPage } from "../pages/ProductsPage";
-import { CartPage } from "../pages/CartPage";
-import { CheckoutPage } from "../pages/CheckoutPage";
+import { LoginPage } from "pages/LoginPage";
+import { ProductsPage } from "pages/ProductsPage";
+import { CartPage } from "pages/CartPage";
+import { CheckoutPage } from "pages/CheckoutPage";
 
 
 type POMFixtures = {

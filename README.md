@@ -37,5 +37,43 @@ Artifacts on failures:
   python -m pytest api_tests --cov=api_tests --cov-report=term-missing \
     --html=api-report.html --self-contained-html
 
+📂 Project Structure & Imports
+
+This project uses TypeScript path aliases for clean, maintainable imports.
+Instead of long relative paths (../../pages/LoginPage), we configure tsconfig.json with baseUrl + paths to support absolute imports.
+
+Example (web-tests/tsconfig.json):
+
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "pages/*": ["pages/*"],
+      "fixtures/*": ["fixtures/*"],
+      "helpers/*": ["helpers/*"]
+    }
+  }
+}
+
+
+Before (relative imports):
+
+import { LoginPage } from "../pages/LoginPage";
+import { CREDS } from "../helpers/creds";
+
+
+After (absolute imports):
+
+import { LoginPage } from "pages/LoginPage";
+import { CREDS } from "helpers/creds";
+
+
+✅ This ensures:
+
+Cleaner code — no fragile ../.. paths
+
+Cross-platform reliability — avoids case sensitivity issues in CI (Linux vs Windows)
+
+Scalability — easy to manage as the project grows
 
 

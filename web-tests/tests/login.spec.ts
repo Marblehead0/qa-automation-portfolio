@@ -1,5 +1,5 @@
-import { test, expect } from "../fixtures/pom_fixtures";
-import { CREDS } from "./helpers/creds";
+import { test, expect } from "fixtures/pom_fixtures";
+import { CREDS } from "helpers/creds";
 
 test.describe("Login flow", () => {
     test("user can log in to saucedemo", async ({ login, product }) => {

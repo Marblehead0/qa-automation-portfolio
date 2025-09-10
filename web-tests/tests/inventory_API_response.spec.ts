@@ -1,4 +1,4 @@
-import {test,expect} from "../fixtures/pom_fixtures";
+import {test,expect} from "fixtures/pom_fixtures";
 
 test("[Mock] mocks inventory API response", async ({page})=>{
     await page.route("**/api/inventory", async route=>{

@@ -1,6 +1,6 @@
-import { test, expect } from "../fixtures/pom_fixtures";
+import { test, expect } from "fixtures/pom_fixtures";
 import fetch from "node-fetch";
-import { CREDS } from "./helpers/creds";
+import { CREDS } from "helpers/creds";
 
 test.describe("Api tests", () => {
 
