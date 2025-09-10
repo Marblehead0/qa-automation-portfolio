@@ -43,10 +43,41 @@ jobs:
 
       - name: Ensure index.html exists
         run: |
-          mkdir -p docs
-          if [ ! -f docs/index.html ]; then
-            cat > docs/index.html <<'HTML'<!doctype html><meta charset="utf-8"><title>Playwright Reports</title><h1>Playwright Reports</h1><ul><li><a href="web-smoke-report/index.html">Smoke Report</a></li><li><a href="web-regression-report/index.html">Regression Report</a></li></ul>HTML
-          fi
+            python - <<'PY'
+            import os, textwrap
+
+            os.makedirs("docs", exist_ok=True)
+            path = "docs/index.html"
+
+            if not os.path.exists(path):
+                html = """\
+                <!doctype html><meta charset="utf-8">
+                <title>Playwright Reports</title>
+                <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+                <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+                <style>
+                    body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;margin:2rem;line-height:1.6}
+                    h1{margin-bottom:0.5rem}
+                    .card{border:1px solid #e5e7eb;border-radius:12px;padding:1rem;margin:1rem 0}
+                    a{color:#2563eb;text-decoration:none}
+                    a:hover{text-decoration:underline}
+                </style>
+                <h1>Playwright Reports</h1>
+                <p>Browse the latest published reports from CI.</p>
+                <div class="card">
+                    <h2>Smoke</h2>
+                    <p><a href="web-smoke-report/index.html">Open smoke report</a></p>
+                </div>
+                <div class="card">
+                    <h2>Regression</h2>
+                    <p><a href="web-regression-report/index.html">Open regression report</a></p>
+                </div>
+                """
+                with open(path, "w", encoding="utf-8") as f:
+                        f.write(textwrap.dedent(html))
+            PY
+
+
 
       - name: Commit and push changes
         run: |
