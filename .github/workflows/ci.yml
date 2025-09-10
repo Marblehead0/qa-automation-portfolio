@@ -84,6 +84,17 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-npm-
 
+      - name: Show working dir & files
+        run: |
+            pwd
+            ls -la
+            echo "----- tsconfig.json -----"
+            cat tsconfig.json || true
+            echo "----- pages dir -----"
+            ls -la pages || true
+            echo "----- fixtures dir -----"
+            ls -la fixtures || true
+                
       - name: Install deps & browsers
         run: |
           npm ci
