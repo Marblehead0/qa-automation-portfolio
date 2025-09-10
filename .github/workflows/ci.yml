@@ -35,7 +35,6 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r api_tests/requirements.txt
-          # Optional HTML report
           pip install pytest-html
 
       - name: Run pytest (coverage + junit + html)
@@ -89,8 +88,14 @@ jobs:
         run: |
           npm ci
           npx playwright install --with-deps
-            name: Set creds
-            run: echo "USERNAME=standard_user" >> $GITHUB_ENV && echo "PASSWORD=secret_sauce" >> $GITHUB_ENV
+
+      # Optional: use default SauceDemo creds via env (if your tests read from process.env)
+      - name: Set creds
+        run: echo "USERNAME=standard_user" >> $GITHUB_ENV && echo "PASSWORD=secret_sauce" >> $GITHUB_ENV
+
+      # If you rely on tsconfig path aliases and didn't add globalSetup, uncomment:
+      # - name: Enable tsconfig paths at runtime
+      #   run: echo "NODE_OPTIONS=-r tsconfig-paths/register" >> $GITHUB_ENV
 
       - name: Run smoke tests
         run: npx playwright test -g "@smoke"
@@ -118,6 +123,11 @@ jobs:
       run:
         working-directory: web-tests
 
+    # If you want secrets-based creds for PR runs, set them at the job level:
+    # env:
+    #   USERNAME: ${{ secrets.E2E_USERNAME }}
+    #   PASSWORD: ${{ secrets.E2E_PASSWORD }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -140,10 +150,13 @@ jobs:
           npm ci
           npx playwright install --with-deps
 
+      # Or set env per-step if you prefer (uncomment next two lines and remove job-level env above):
+      # - name: Set creds from secrets
+      #   run: echo "USERNAME=${{ secrets.E2E_USERNAME }}" >> $GITHUB_ENV && echo "PASSWORD=${{ secrets.E2E_PASSWORD }}" >> $GITHUB_ENV
 
-        env:
-         USERNAME: ${{ secrets.E2E_USERNAME }}
-         PASSWORD: ${{ secrets.E2E_PASSWORD }}
+      # If you rely on tsconfig path aliases and didn't add globalSetup, uncomment:
+      # - name: Enable tsconfig paths at runtime
+      #   run: echo "NODE_OPTIONS=-r tsconfig-paths/register" >> $GITHUB_ENV
 
       - name: Run regression tests
         run: npx playwright test -g "@regression"
