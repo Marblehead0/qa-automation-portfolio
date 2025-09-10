@@ -141,7 +141,7 @@ jobs:
           npx playwright install --with-deps
 
 
-       env:
+        env:
          USERNAME: ${{ secrets.E2E_USERNAME }}
          PASSWORD: ${{ secrets.E2E_PASSWORD }}
 
