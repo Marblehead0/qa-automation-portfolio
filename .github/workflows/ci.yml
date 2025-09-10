@@ -1,0 +1,165 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ---------- API TESTS (runs on push & PR) ----------
+  api:
+    name: API (pytest)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('api_tests/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r api_tests/requirements.txt
+          # Optional HTML report
+          pip install pytest-html
+
+      - name: Run pytest (coverage + junit + html)
+        run: |
+          mkdir -p test-results
+          python -m pytest api_tests \
+            --cov=api_tests \
+            --cov-report=term-missing \
+            --cov-report=xml \
+            --cov-report=html \
+            --junitxml=test-results/junit.xml \
+            --html=test-results/api-report.html --self-contained-html
+
+      - name: Upload API artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-artifacts
+          path: |
+            test-results
+            htmlcov
+            coverage.xml
+
+  # ---------- WEB TESTS: SMOKE on push ----------
+  web-smoke:
+    name: Web (Playwright Smoke)
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    defaults:
+      run:
+        working-directory: web-tests
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Cache npm
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('web-tests/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
+
+      - name: Install deps & browsers
+        run: |
+          npm ci
+          npx playwright install --with-deps
+
+      # If you use env-based creds, set them here (optional)
+      # - name: Set creds
+      #   run: echo "USERNAME=standard_user" >> $GITHUB_ENV && echo "PASSWORD=secret_sauce" >> $GITHUB_ENV
+
+      - name: Run smoke tests
+        run: npx playwright test -g "@smoke"
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-smoke-report
+          path: web-tests/playwright-report
+
+      - name: Upload test-results (traces/screenshots/videos)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-smoke-test-results
+          path: web-tests/test-results
+
+  # ---------- WEB TESTS: REGRESSION on PR ----------
+  web-regression:
+    name: Web (Playwright Regression)
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    defaults:
+      run:
+        working-directory: web-tests
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Cache npm
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('web-tests/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
+
+      - name: Install deps & browsers
+        run: |
+          npm ci
+          npx playwright install --with-deps
+
+      # If using env creds, set them from repo/org secrets (recommended)
+      # env:
+      #   USERNAME: ${{ secrets.E2E_USERNAME }}
+      #   PASSWORD: ${{ secrets.E2E_PASSWORD }}
+
+      - name: Run regression tests
+        run: npx playwright test -g "@regression"
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-regression-report
+          path: web-tests/playwright-report
+
+      - name: Upload test-results (traces/screenshots/videos)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-regression-test-results
+          path: web-tests/test-results

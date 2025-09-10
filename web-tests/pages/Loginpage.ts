@@ -30,6 +30,10 @@ export class LoginPage{
 
     async expectErrorContains(text: string){
         await expect(this.errorMessage).toContainText(text);
-    }   
+    }
+    
+    async expectOnPage(){
+        await expect(this.loginButton).toBeVisible();
+    }
 }
         

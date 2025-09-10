@@ -5,7 +5,7 @@ export default defineConfig({
   reporter: [['html', {open: 'never'}]],
 
   use: {
-    baseURL: "https://www.saucedemo.com/",
+    baseURL: process.env.BASE_URL ?? "https://www.saucedemo.com/",
     headless : true,
 
     screenshot: 'only-on-failure',

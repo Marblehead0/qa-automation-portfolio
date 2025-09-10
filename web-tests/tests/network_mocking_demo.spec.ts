@@ -1,7 +1,7 @@
 // web-tests/tests/network-mocking-demo.spec.ts
 import { test, expect } from "@playwright/test";
 
-test.describe("[demo] network mocking examples", () => {
+test.describe("Mock test", () => {
   test("returns mocked JSON data", async ({ page }) => {
     // Intercept any request ending with /api/demo
     await page.route("**/api/demo", async route => {

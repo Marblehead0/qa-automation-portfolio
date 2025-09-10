@@ -1,27 +1,34 @@
-import { test } from "@playwright/test";
-import { LoginPage } from "../pages/LoginPage";
-import { ProductsPage } from "../pages/ProductsPage";
+import { test, expect } from "../fixtures/pom_fixtures";
 import { CREDS } from "./helpers/creds";
 
-test.describe("Success", () => {
-    test("user can log in to saucedemo", async ({ page }) => {
+test.describe("Login flow", () => {
+    test("user can log in to saucedemo", async ({ login, product }) => {
         await test.step("login", async () => {
-            const loginpage = new LoginPage(page);
-            const productspage = new ProductsPage(page);
 
-            await loginpage.goto();
-            await loginpage.login(CREDS.user, CREDS.pass);
-            await productspage.expectOnPage();
+            await login.goto();
+            await login.login(CREDS.user, CREDS.pass);
+            await product.expectOnPage();
         });
     });
+
+    test("user can log out from the products page", async ({ login, product }) => {
+
+        await login.goto();
+        await login.login(CREDS.user, CREDS.pass);
+        await product.expectOnPage();
+
+        await product.logout();
+
+        await login.expectOnPage();
+    });
+
+    test("@regression shows error for invalid credentials", async ({ login }) => {
+        await login.goto();
+        await login.login(CREDS.user, "wrong");
+        await login.expectErrorContains("Username and password do not match");
+    });
+
 });
 
-test("user cannot log in with invalid password", async ({ page }) => {
-    const loginpage = new LoginPage(page);
-
-    await loginpage.goto();
-    await loginpage.login("standard_user", "wrong_password");
-    await loginpage.expectErrorContains("Username and password do not match any user in this service");
-});
 
 

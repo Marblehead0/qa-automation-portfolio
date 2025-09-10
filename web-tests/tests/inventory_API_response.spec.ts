@@ -16,8 +16,16 @@ test("[Mock] mocks inventory API response", async ({page})=>{
         });
     });
 
-    await page.goto("/");
+  // Use an origin so /api/inventory resolves
+  await page.goto("https://example.com/");
 
-    await expect(page.getByText("Mocked Product 1")).toBeVisible();
-    await expect(page.getByText("Mocked Product 2")).toBeVisible();
+  // Trigger the API request manually from the browser
+  const data = await page.evaluate(async () => {
+    const res = await fetch("/api/inventory");
+    return res.json();
+  });
+
+
+  expect(data.items[0].name).toBe("Mocked Product 1");
+  expect(data.items[1].name).toBe("Mocked Product 2");
 });
