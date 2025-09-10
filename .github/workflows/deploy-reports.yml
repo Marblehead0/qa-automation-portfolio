@@ -1,39 +1,57 @@
+# .github/workflows/deploy-reports.yml
 name: Deploy Reports
 
 on:
   workflow_run:
     workflows: ["Web Smoke Tests", "Web Regression Tests"]
-    types:
-      - completed
+    types: [completed]
+
+permissions:
+  contents: write   # allow committing to the repo
 
 jobs:
   deploy:
-    name: Deploy latest Playwright report to GitHub Pages
+    name: Commit Playwright reports to /docs on main
     runs-on: ubuntu-latest
+    # publish even if tests failed (so you can see the report)
     if: ${{ github.event.workflow_run.conclusion == 'success' || github.event.workflow_run.conclusion == 'failure' }}
 
     steps:
-      - name: Checkout
+      - name: Checkout main (full history)
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: main
 
-      - name: Download report artifact
+      - name: Download smoke report (if present)
         uses: actions/download-artifact@v4
         with:
           name: web-smoke-report
-          path: docs/playwright-report
+          path: docs/web-smoke-report
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
         continue-on-error: true
 
-      - name: Download regression report artifact
+      - name: Download regression report (if present)
         uses: actions/download-artifact@v4
         with:
           name: web-regression-report
-          path: docs/playwright-report
+          path: docs/web-regression-report
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
         continue-on-error: true
 
-      - name: Commit and push updated report
+      - name: Ensure index.html exists
         run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
+          mkdir -p docs
+          if [ ! -f docs/index.html ]; then
+            cat > docs/index.html <<'HTML'<!doctype html><meta charset="utf-8"><title>Playwright Reports</title><h1>Playwright Reports</h1><ul><li><a href="web-smoke-report/index.html">Smoke Report</a></li><li><a href="web-regression-report/index.html">Regression Report</a></li></ul>HTML
+          fi
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
           git add docs/
-          git commit -m "Update Playwright report [skip ci]" || echo "No changes"
+          git commit -m "Update Playwright reports [skip ci]" || echo "No changes"
           git push
