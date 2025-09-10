@@ -1,9 +1,7 @@
 # QA Automation Portfolio
 
 ![Build](https://github.com/Marblehead0/qa-automation-portfolio/actions/workflows/playwright.yml/badge.svg)
-![Coverage](https://img.shields.io/badge/coverage-85%25-brightgreen)
 ![Languages](https://img.shields.io/badge/languages-Python%20%7C%20TypeScript-blue)
-![License](https://img.shields.io/badge/license-MIT-lightgrey)
 [![CI](https://github.com/Marblehead0/qa-automation-portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/Marblehead0/qa-automation-portfolio/actions/workflows/ci.yml)
 [![Coverage](https://codecov.io/gh/Marblehead0/qa-automation-portfolio/branch/main/graph/badge.svg)](https://codecov.io/gh/Marblehead0/qa-automation-portfolio)
 
