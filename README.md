@@ -114,9 +114,10 @@ The project uses GitHub Actions for continuous testing:
 
 [![API Tests](https://github.com/Marblehead0/qa-automation-portfolio/actions/workflows/api-tests.yml/badge.svg)](https://github.com/Marblehead0/qa-automation-portfolio/actions/workflows/api-tests.yml)  
 [![Web Tests](https://github.com/Marblehead0/qa-automation-portfolio/actions/workflows/web-tests.yml/badge.svg)](https://github.com/Marblehead0/qa-automation-portfolio/actions/workflows/web-tests.yml)  
+
 [![codecov](https://codecov.io/gh/Marblehead0/qa-automation-portfolio/branch/main/graph/badge.svg)](https://codecov.io/gh/Marblehead0/qa-automation-portfolio)
-[![Playwright Smoke Report](https://img.shields.io/badge/Report-Smoke-blue?logo=github)](https://Marblehead0.github.io/qa-automation-portfolio/web-smoke-report/index.html)  
-[![Playwright Regression Report](https://img.shields.io/badge/Report-Regression-blue?logo=github)](https://Marblehead0.github.io/qa-automation-portfolio/web-regression-report/index.html)
+
+[![Playwright Report](https://img.shields.io/badge/Report-Latest-blue?logo=github)](https://Marblehead0.github.io/qa-automation-portfolio/playwright-report/index.html)
 
 
 👨‍💻 Tech Stack

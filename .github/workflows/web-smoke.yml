@@ -1,0 +1,36 @@
+name: Web Smoke Tests
+
+on:
+  push:
+
+jobs:
+  web-smoke:
+    name: Web (Playwright Smoke)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web-tests
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install deps & browsers
+        run: |
+          npm ci
+          npx playwright install --with-deps
+
+      - name: Run smoke tests
+        run: npx playwright test -g "@smoke" --reporter=html
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-smoke-report
+          path: web-tests/playwright-report

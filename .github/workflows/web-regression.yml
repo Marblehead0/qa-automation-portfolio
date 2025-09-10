@@ -1,0 +1,36 @@
+name: Web Regression Tests
+
+on:
+  pull_request:
+
+jobs:
+  web-regression:
+    name: Web (Playwright Regression)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web-tests
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install deps & browsers
+        run: |
+          npm ci
+          npx playwright install --with-deps
+
+      - name: Run regression tests
+        run: npx playwright test -g "@regression" --reporter=html
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-regression-report
+          path: web-tests/playwright-report
