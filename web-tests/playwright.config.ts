@@ -1,6 +1,10 @@
 import  {defineConfig, devices} from '@playwright/test';
 
 export default defineConfig({
+
+ globalSetup: require.resolve("./global-setup"),
+
+
   retries: 1,
   reporter: [['html', {open: 'never'}]],
 
