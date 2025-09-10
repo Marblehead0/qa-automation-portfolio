@@ -89,10 +89,8 @@ jobs:
         run: |
           npm ci
           npx playwright install --with-deps
-
-      # If you use env-based creds, set them here (optional)
-      # - name: Set creds
-      #   run: echo "USERNAME=standard_user" >> $GITHUB_ENV && echo "PASSWORD=secret_sauce" >> $GITHUB_ENV
+            name: Set creds
+            run: echo "USERNAME=standard_user" >> $GITHUB_ENV && echo "PASSWORD=secret_sauce" >> $GITHUB_ENV
 
       - name: Run smoke tests
         run: npx playwright test -g "@smoke"
@@ -142,10 +140,10 @@ jobs:
           npm ci
           npx playwright install --with-deps
 
-      # If using env creds, set them from repo/org secrets (recommended)
-      # env:
-      #   USERNAME: ${{ secrets.E2E_USERNAME }}
-      #   PASSWORD: ${{ secrets.E2E_PASSWORD }}
+
+       env:
+         USERNAME: ${{ secrets.E2E_USERNAME }}
+         PASSWORD: ${{ secrets.E2E_PASSWORD }}
 
       - name: Run regression tests
         run: npx playwright test -g "@regression"
