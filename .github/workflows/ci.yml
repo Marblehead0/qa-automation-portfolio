@@ -107,16 +107,18 @@ jobs:
           npm ci
           npx playwright install --with-deps
 
-      # Optional: use default SauceDemo creds via env (if your tests read from process.env)
       - name: Set creds
         run: echo "USERNAME=standard_user" >> $GITHUB_ENV && echo "PASSWORD=secret_sauce" >> $GITHUB_ENV
 
-      # If you rely on tsconfig path aliases and didn't add globalSetup, uncomment:
-      # - name: Enable tsconfig paths at runtime
-      #   run: echo "NODE_OPTIONS=-r tsconfig-paths/register" >> $GITHUB_ENV
-
       - name: Run smoke tests
-        run: npx playwright test -g "@smoke"
+        run: npx playwright test -g "@smoke" --reporter=html
+
+      - name: Copy Playwright report to docs (for GitHub Pages)
+        if: always()
+        run: |
+          rm -rf ../../docs/web-smoke-report
+          mkdir -p ../../docs
+          cp -r playwright-report ../../docs/web-smoke-report
 
       - name: Upload Playwright report
         if: always()
@@ -132,6 +134,7 @@ jobs:
           name: web-smoke-test-results
           path: web-tests/test-results
 
+
   # ---------- WEB TESTS: REGRESSION on PR ----------
   web-regression:
     name: Web (Playwright Regression)
@@ -140,11 +143,6 @@ jobs:
     defaults:
       run:
         working-directory: web-tests
-
-    # If you want secrets-based creds for PR runs, set them at the job level:
-    # env:
-    #   USERNAME: ${{ secrets.E2E_USERNAME }}
-    #   PASSWORD: ${{ secrets.E2E_PASSWORD }}
 
     steps:
       - name: Checkout
@@ -168,16 +166,15 @@ jobs:
           npm ci
           npx playwright install --with-deps
 
-      # Or set env per-step if you prefer (uncomment next two lines and remove job-level env above):
-      # - name: Set creds from secrets
-      #   run: echo "USERNAME=${{ secrets.E2E_USERNAME }}" >> $GITHUB_ENV && echo "PASSWORD=${{ secrets.E2E_PASSWORD }}" >> $GITHUB_ENV
-
-      # If you rely on tsconfig path aliases and didn't add globalSetup, uncomment:
-      # - name: Enable tsconfig paths at runtime
-      #   run: echo "NODE_OPTIONS=-r tsconfig-paths/register" >> $GITHUB_ENV
-
       - name: Run regression tests
-        run: npx playwright test -g "@regression"
+        run: npx playwright test -g "@regression" --reporter=html
+
+      - name: Copy Playwright report to docs (for GitHub Pages)
+        if: always()
+        run: |
+          rm -rf ../../docs/web-regression-report
+          mkdir -p ../../docs
+          cp -r playwright-report ../../docs/web-regression-report
 
       - name: Upload Playwright report
         if: always()
