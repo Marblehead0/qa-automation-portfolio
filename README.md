@@ -118,11 +118,15 @@ Reports deployed to GitHub Pages under /docs/.
 
 # ✅ Status Badges
 
+## ✅ Status Badges
+
 [![API Tests](https://github.com/Marblehead0/qa-automation-portfolio/actions/workflows/api-tests.yml/badge.svg)](https://github.com/Marblehead0/qa-automation-portfolio/actions/workflows/api-tests.yml)  
-[![Web Smoke Tests](https://github.com/Marblehead0/qa-automation-portfolio/actions/workflows/web-smoke.yml/badge.svg)](https://github.com/Marblehead0/qa-automation-portfolio/actions/workflows/web-smoke.yml) 
-[![Web Regression Tests](https://github.com/Marblehead0/qa-automation-portfolio/actions/workflows/web-regression.yml/badge.svg)](https://github.com/Marblehead0/qa-automation-portfolio/actions/workflows/web-regression.yml) 
-[![codecov](https://codecov.io/gh/Marblehead0/qa-automation-portfolio/branch/main/graph/badge.svg)](https://codecov.io/gh/Marblehead0/qa-automation-portfolio)
-[![Playwright Report](https://img.shields.io/badge/Report-Latest-blue?logo=github)](https://Marblehead0.github.io/qa-automation-portfolio/playwright-report/index.html)
+[![Web Smoke Tests](https://github.com/Marblehead0/qa-automation-portfolio/actions/workflows/web-smoke.yml/badge.svg)](https://github.com/Marblehead0/qa-automation-portfolio/actions/workflows/web-smoke.yml)  
+[![Web Regression Tests](https://github.com/Marblehead0/qa-automation-portfolio/actions/workflows/web-regression.yml/badge.svg)](https://github.com/Marblehead0/qa-automation-portfolio/actions/workflows/web-regression.yml)  
+[![Coverage](https://codecov.io/gh/Marblehead0/qa-automation-portfolio/branch/main/graph/badge.svg)](https://codecov.io/gh/Marblehead0/qa-automation-portfolio)  
+[![Playwright Smoke Report](https://img.shields.io/badge/Report-Smoke-blue?logo=github)](https://Marblehead0.github.io/qa-automation-portfolio/web-smoke-report/index.html)  
+[![Playwright Regression Report](https://img.shields.io/badge/Report-Regression-blue?logo=github)](https://Marblehead0.github.io/qa-automation-portfolio/web-regression-report/index.html)
+
 
 
 # 👨‍💻 Tech Stack

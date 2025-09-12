@@ -25,12 +25,19 @@ jobs:
           npm ci
           npx playwright install --with-deps
 
-      - name: Run regression tests
+      - name: Run regression tests (HTML report)
         run: npx playwright test -g "@regression" --reporter=html
 
-      - name: Upload Playwright report
+      - name: Upload Playwright report (artifact for deploy workflow)
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: web-regression-report
           path: web-tests/playwright-report
+
+      - name: Upload traces/screenshots/videos
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-regression-test-results
+          path: web-tests/test-results
