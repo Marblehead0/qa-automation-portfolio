@@ -1,14 +1,11 @@
 # QA Automation Portfolio
-
-![Build](https://github.com/Marblehead0/qa-automation-portfolio/actions/workflows/playwright.yml/badge.svg)
 ![Languages](https://img.shields.io/badge/languages-Python%20%7C%20TypeScript-blue)
-[![CI](https://github.com/Marblehead0/qa-automation-portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/Marblehead0/qa-automation-portfolio/actions/workflows/ci.yml)
 [![Coverage](https://codecov.io/gh/Marblehead0/qa-automation-portfolio/branch/main/graph/badge.svg)](https://codecov.io/gh/Marblehead0/qa-automation-portfolio)
 [![Playwright Smoke Report](https://img.shields.io/badge/Report-Smoke-blue?logo=github)](https://Marblehead0.github.io/qa-automation-portfolio/web-smoke-report/index.html)  
 [![Playwright Regression Report](https://img.shields.io/badge/Report-Regression-blue?logo=github)](https://Marblehead0.github.io/qa-automation-portfolio/web-regression-report/index.html)
 
 ---
-📖 Overview
+# 📖 Overview
 
 This project demonstrates API and Web automation with CI/CD pipelines, reporting, and coverage — similar to real QA team setups.
 
@@ -22,7 +19,7 @@ CI/CD pipelines in GitHub Actions (push/PR triggers, smoke/regression tags, arti
 
 Reporting & coverage with Codecov and GitHub Pages
 
-🚀 Features
+# 🚀 Features
 
 API Tests → Python + Pytest + Coverage + HTML report
 
@@ -42,7 +39,7 @@ Artifacts uploaded (reports, traces, screenshots, coverage)
 
 Badges → Build Status + Code Coverage
 
-📂 Project Structure
+# 📂 Project Structure
 qa-automation-portfolio/
 ├── api-tests/
 │   ├── tests/                # API test cases
@@ -61,32 +58,33 @@ qa-automation-portfolio/
 ├── package.json              # Node deps
 └── README.md
 
-⚙️ Usage
+# ⚙️ Usage
 
-🔹 Run API Tests
-# Install Python dependencies
+# Run API Tests
+🔹 Install Python dependencies
 pip install -r requirements.txt
 
-# Run all API tests with coverage + HTML report
+🔹 Run all API tests with coverage + HTML report
 python -m pytest api-tests \
   --html=reports/api-report.html --self-contained-html \
   --cov=api-tests --cov-report=html
 
-🔹 Run Web Tests
-# Install Node.js dependencies
+# Run Web Tests
+🔹 Install Node.js dependencies
 npm install
 
-# Run all Playwright tests
+🔹 Run all Playwright tests
 npx playwright test
 
-🔹 Run Tagged Tests
-# Run smoke tests only
+🔹 Run smoke tests only
 npx playwright test --grep @smoke
 
-# Run regression tests only
+🔹 Run regression tests only
 npx playwright test --grep @regression
 
-📊 Sample Reports & Screenshots
+
+
+# 📊 Sample Reports & Screenshots
 
 🔹 API Test Report (Pytest)
 - [View API Coverage on Codecov](https://codecov.io/gh/Marblehead0/qa-automation-portfolio)
@@ -100,13 +98,15 @@ npx playwright test --grep @regression
 - [Live Regression Report](https://Marblehead0.github.io/qa-automation-portfolio/web-regression-report/index.html)
 - Example screenshot:
 
+![Playwright Report Example](docs/sample-playwright-report.png)
+
 ### 🔹 Coverage Report (HTML)
 - Local HTML coverage report generated at: `htmlcov/index.html`
 - Uploaded automatically to Codecov
 
 (Reports and screenshots are stored in reports/ and uploaded as GitHub Actions artifacts.)
 
-🏗️ CI/CD Workflows
+# 🏗️ CI/CD Workflows
 
 API tests → on push & PR
 
@@ -114,10 +114,9 @@ Smoke tests → on push
 
 Regression tests → on PR & main
 
-Reports deployed to GitHub Pages under /docs/
-.
+Reports deployed to GitHub Pages under /docs/.
 
-✅ Status Badges
+# ✅ Status Badges
 
 [![API Tests](https://github.com/Marblehead0/qa-automation-portfolio/actions/workflows/api-tests.yml/badge.svg)](https://github.com/Marblehead0/qa-automation-portfolio/actions/workflows/api-tests.yml)  
 [![Web Smoke Tests](https://github.com/Marblehead0/qa-automation-portfolio/actions/workflows/web-smoke.yml/badge.svg)](https://github.com/Marblehead0/qa-automation-portfolio/actions/workflows/web-smoke.yml) 
@@ -126,7 +125,7 @@ Reports deployed to GitHub Pages under /docs/
 [![Playwright Report](https://img.shields.io/badge/Report-Latest-blue?logo=github)](https://Marblehead0.github.io/qa-automation-portfolio/playwright-report/index.html)
 
 
-👨‍💻 Tech Stack
+# 👨‍💻 Tech Stack
 
 Python (Pytest, Coverage, HTML reporting)
 
@@ -136,7 +135,7 @@ GitHub Actions (CI/CD, artifacts, Pages deployment)
 
 Codecov (coverage tracking)
 
-📌 Future Improvements
+# 📌 Future Improvements
 
 API contract testing (schemathesis, pydantic)
 
