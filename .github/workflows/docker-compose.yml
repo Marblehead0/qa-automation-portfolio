@@ -1,0 +1,38 @@
+version: "3.9"
+
+# Build one image from your Dockerfile and reuse it across services
+x-base: &base
+  build: .
+  volumes:
+    - .:/app
+
+services:
+  # -------------------- API --------------------
+  api-tests:
+    <<: *base
+    container_name: qa-api-tests
+    working_dir: /app
+    command: >
+      python -m pytest api_tests
+      --html=reports/api-report.html --self-contained-html
+      --cov=api_tests --cov-report=html
+
+  # -------------------- WEB (Playwright) --------------------
+  web-smoke:
+    <<: *base
+    container_name: qa-web-smoke
+    working_dir: /app/web_tests
+    # If you use TS path aliases at runtime, uncomment NODE_OPTIONS
+    # environment:
+    #   NODE_OPTIONS: -r tsconfig-paths/register
+    command: >
+      npx playwright test -g "@smoke" --reporter=html
+
+  web-regression:
+    <<: *base
+    container_name: qa-web-regression
+    working_dir: /app/web_tests
+    # environment:
+    #   NODE_OPTIONS: -r tsconfig-paths/register
+    command: >
+      npx playwright test -g "@regression" --reporter=html

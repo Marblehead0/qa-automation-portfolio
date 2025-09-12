@@ -41,11 +41,11 @@ Badges → Build Status + Code Coverage
 
 # 📂 Project Structure
 qa-automation-portfolio/
-├── api-tests/
+├── api_tests/
 │   ├── tests/                # API test cases
 │   ├── conftest.py           # Shared fixtures
 │   └── pytest.ini            # Pytest config
-├── web-tests/
+├── web_tests/
 │   ├── tests/                # UI test cases
 │   ├── pages/                # Page Object Model
 │   ├── playwright.config.ts  # Playwright config
@@ -65,9 +65,9 @@ qa-automation-portfolio/
 pip install -r requirements.txt
 
 🔹 Run all API tests with coverage + HTML report
-python -m pytest api-tests \
+python -m pytest api_tests \
   --html=reports/api-report.html --self-contained-html \
-  --cov=api-tests --cov-report=html
+  --cov=api_tests --cov-report=html
 
 # Run Web Tests
 🔹 Install Node.js dependencies
@@ -120,7 +120,7 @@ Reports deployed to GitHub Pages under /docs/.
 
 ## ✅ Status Badges
 
-[![API Tests](https://github.com/Marblehead0/qa-automation-portfolio/actions/workflows/api-tests.yml/badge.svg)](https://github.com/Marblehead0/qa-automation-portfolio/actions/workflows/api-tests.yml)  
+[![API Tests](https://github.com/Marblehead0/qa-automation-portfolio/actions/workflows/api_tests.yml/badge.svg)](https://github.com/Marblehead0/qa-automation-portfolio/actions/workflows/api_tests.yml)  
 [![Web Smoke Tests](https://github.com/Marblehead0/qa-automation-portfolio/actions/workflows/web-smoke.yml/badge.svg)](https://github.com/Marblehead0/qa-automation-portfolio/actions/workflows/web-smoke.yml)  
 [![Web Regression Tests](https://github.com/Marblehead0/qa-automation-portfolio/actions/workflows/web-regression.yml/badge.svg)](https://github.com/Marblehead0/qa-automation-portfolio/actions/workflows/web-regression.yml)  
 [![Coverage](https://codecov.io/gh/Marblehead0/qa-automation-portfolio/branch/main/graph/badge.svg)](https://codecov.io/gh/Marblehead0/qa-automation-portfolio)  
@@ -148,5 +148,38 @@ Visual regression for UI
 Allure reports integration
 
 Docker setup for local runs
+
+# 🐳 Run with Docker
+
+Run the project inside Docker without installing Python, Node, or Playwright locally.
+
+🔹 Build the image
+docker-compose build
+
+🔹 Run API Tests
+docker-compose run --rm api-tests
+
+
+Generates API HTML report → reports/api-report.html
+
+Generates coverage report → htmlcov/index.html
+
+🔹 Run Web Smoke Tests
+docker-compose run --rm web-smoke
+
+
+Generates Playwright HTML report → web_tests/playwright-report/index.html
+
+Saves artifacts (traces, screenshots, videos) → web_tests/test-results/
+
+🔹 Run Web Regression Tests
+docker-compose run --rm web-regression
+
+
+Generates Playwright HTML report → web_tests/playwright-report/index.html
+
+Saves artifacts → web_tests/test-results/
+
+✅ With Docker, everything runs in an isolated container, so recruiters can run your full suite with just one command per test type.
 
 
