@@ -1,0 +1,28 @@
+# docker-compose.yml
+
+services:
+  api-tests:
+    build:
+      context: .
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: ["python", "-m", "pytest", "api_tests",
+              "--html=reports/api-report.html", "--self-contained-html",
+              "--cov=api_tests", "--cov-report=html"]
+
+  web-smoke:
+    build:
+      context: .
+    working_dir: /app/web_tests
+    volumes:
+      - .:/app
+    command: ["npx", "playwright", "test", "-g", "@smoke", "--reporter=html"]
+
+  web-regression:
+    build:
+      context: .
+    working_dir: /app/web_tests
+    volumes:
+      - .:/app
+    command: ["npx", "playwright", "test", "-g", "@regression", "--reporter=html"]
