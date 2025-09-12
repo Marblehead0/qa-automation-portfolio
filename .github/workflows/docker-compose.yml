@@ -1,38 +1,41 @@
-version: "3.9"
+# docker-compose.yml (Compose v2, no "version:", no "x-base")
 
-# Build one image from your Dockerfile and reuse it across services
-x-base: &base
-  build: .
-  volumes:
-    - .:/app
-
-services:
-  # -------------------- API --------------------
-  api-tests:
-    <<: *base
+    services:
+    # -------------------- API --------------------
+    api-tests:
+    build:
+      context: .
     container_name: qa-api-tests
     working_dir: /app
+    volumes:
+      - .:/app
     command: >
       python -m pytest api_tests
       --html=reports/api-report.html --self-contained-html
       --cov=api_tests --cov-report=html
 
   # -------------------- WEB (Playwright) --------------------
-  web-smoke:
-    <<: *base
+     web-smoke:
+    build:
+      context: .
     container_name: qa-web-smoke
     working_dir: /app/web_tests
-    # If you use TS path aliases at runtime, uncomment NODE_OPTIONS
-    # environment:
-    #   NODE_OPTIONS: -r tsconfig-paths/register
+    volumes:
+      - .:/app
     command: >
       npx playwright test -g "@smoke" --reporter=html
-
-  web-regression:
-    <<: *base
-    container_name: qa-web-regression
-    working_dir: /app/web_tests
+    # If you use TS path aliases at runtime:
     # environment:
     #   NODE_OPTIONS: -r tsconfig-paths/register
+
+    web-regression:
+    build:
+      context: .
+    container_name: qa-web-regression
+    working_dir: /app/web_tests
+    volumes:
+      - .:/app
     command: >
       npx playwright test -g "@regression" --reporter=html
+    # environment:
+    #   NODE_OPTIONS: -r tsconfig-paths/register
