@@ -1,8 +1,8 @@
-import { test, expect } from "fixtures/pom_fixtures";
+import { test, expect } from "@fixtures/pom_fixtures";
 import { CREDS } from "helpers/creds";
 
 test.describe("Cart flow", () => {
-    test("user can see product and see it in the cart", async ({ login, product, cart, }) => {
+    test("user can see product and see it in the cart", async ({ login, product, cart }) => {
 
 
         await login.goto();
@@ -13,7 +13,7 @@ test.describe("Cart flow", () => {
         await product.expectCartBadgeCount(1);
 
         await cart.gotoCart();
-        await cart.expectProductIncart("Sauce Labs Backpack");
+        await cart.expectProductInCart("Sauce Labs Backpack");
     });
 
     test("user can add first product to cart", async ({ login, product }) => {
@@ -47,7 +47,7 @@ test.describe("Cart flow", () => {
         await product.expectCartBadgeCount(1);
 
         await cart.gotoCart();
-        await cart.expectProductIncart(name);
+        await cart.expectProductInCart(name);
 
         await cart.removeItemByName(name);
         await cart.expectCartEmpty();
@@ -65,7 +65,7 @@ test.describe("Cart flow", () => {
         await product.expectCartCount(1);
 
         await cart.gotoCart();
-        await cart.expectProductIncart("Sauce Labs Backpack");
+        await cart.expectProductInCart("Sauce Labs Backpack");
 
     });
 

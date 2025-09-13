@@ -1,5 +1,4 @@
-import undiciTypes = require("undici-types");
-import { test, expect } from "fixtures/pom_fixtures";
+import { test, expect } from "@fixtures/pom_fixtures";
 
 test("@regression no console errors on login page", async ({ page }) => {
     const errors: string[] = [];

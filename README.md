@@ -1,8 +1,6 @@
 # QA Automation Portfolio
 ![Languages](https://img.shields.io/badge/languages-Python%20%7C%20TypeScript-blue)
 [![Coverage](https://codecov.io/gh/Marblehead0/qa-automation-portfolio/branch/main/graph/badge.svg)](https://codecov.io/gh/Marblehead0/qa-automation-portfolio)
-[![Playwright Smoke Report](https://img.shields.io/badge/Report-Smoke-blue?logo=github)](https://Marblehead0.github.io/qa-automation-portfolio/web-smoke-report/index.html)  
-[![Playwright Regression Report](https://img.shields.io/badge/Report-Regression-blue?logo=github)](https://Marblehead0.github.io/qa-automation-portfolio/web-regression-report/index.html)
 
 ---
 # 📖 Overview
@@ -180,6 +178,5 @@ Generates Playwright HTML report → web_tests/playwright-report/index.html
 
 Saves artifacts → web_tests/test-results/
 
-✅ With Docker, everything runs in an isolated container, so recruiters can run your full suite with just one command per test type.
 
 

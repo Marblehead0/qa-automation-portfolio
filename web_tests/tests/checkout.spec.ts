@@ -1,24 +1,23 @@
-import { test, expect } from "fixtures/pom_fixtures";
-import { CREDS } from "helpers/creds";
+import { test, expect } from "@fixtures/pom_fixtures";
+import { CREDS } from "@helpers/creds";
+
 
 test.describe("Checkout flow", () => {
-
+const PRODUCT = "Sauce Labs Backpack";
     test("@smoke happy path: login, add to cart, checkout, complete", async ({ login, product, cart, checkout }) => {
         await test.step("login", async () => {
             await login.goto();
-            await login.login(CREDS.user, CREDS.pass);
-            await product.expectOnPage();
+            await login.loginAndExpectSuccess(CREDS.user, CREDS.pass);
         });
 
         await test.step("add to cart", async () => {
-            const name = "Sauce Labs Backpack";
-            await product.addItemTocartByName(name);
+            await product.addItemTocartByName(PRODUCT);
             await product.expectCartCount(1);
         });
 
         await test.step("start checkout", async () => {
             await cart.gotoCart();
-            await cart.expectProductIncart("Sauce Labs Backpack");
+            await cart.expectProductInCart(PRODUCT);
             await cart.startCheckout();
             await checkout.expectOnStepOne();
         });
@@ -31,19 +30,17 @@ test.describe("Checkout flow", () => {
         });
     });
 
-    test("checkout blocks when ZIP is missing", async ({ login, product, cart, checkout }) => {
+    test("@regression checkout blocks when ZIP is missing", async ({ login, product, cart, checkout }) => {
 
 
         await login.goto();
-        await login.login(CREDS.user, CREDS.pass);
+        await login.loginAndExpectSuccess(CREDS.user, CREDS.pass);
 
-        await product.expectOnPage();
-        const name = "Sauce Labs Backpack";
-        await product.addItemTocartByName(name);
+        await product.addItemTocartByName(PRODUCT);
         await product.expectCartBadgeCount(1);
 
         await cart.gotoCart();
-        await cart.expectProductIncart(name);
+        await cart.expectProductInCart(PRODUCT);
 
         await cart.startCheckout();
 
@@ -54,17 +51,15 @@ test.describe("Checkout flow", () => {
 
     });
 
-    test("blocks when first name is missing", async ({ login, product, cart, checkout }) => {
+    test("@regression blocks when first name is missing", async ({ login, product, cart, checkout }) => {
         await login.goto();
-        await login.login(CREDS.user, CREDS.pass);
-        await product.expectOnPage();
+        await login.loginAndExpectSuccess(CREDS.user, CREDS.pass);
 
-        const name = "Sauce Labs Backpack";
-        await product.addItemTocartByName(name);
+        await product.addItemTocartByName(PRODUCT);
         await product.expectCartBadgeCount(1);
 
         await cart.gotoCart();
-        await cart.expectProductIncart(name);
+        await cart.expectProductInCart(PRODUCT);
         await cart.startCheckout();
 
         await checkout.expectOnStepOne();
@@ -73,17 +68,15 @@ test.describe("Checkout flow", () => {
         await checkout.expectErrorContains("First Name is required");
     });
 
-    test("blocks when last name is missing", async ({ login, product, cart, checkout }) => {
+    test("@regression blocks when last name is missing", async ({ login, product, cart, checkout }) => {
         await login.goto();
-        await login.login(CREDS.user, CREDS.pass);
+        await login.loginAndExpectSuccess(CREDS.user, CREDS.pass);
 
-        await product.expectOnPage();
-        const name = "Sauce Labs Backpack";
-        await product.addItemTocartByName(name);
+        await product.addItemTocartByName(PRODUCT);
         await product.expectCartBadgeCount(1);
 
         await cart.gotoCart();
-        await cart.expectProductIncart(name);
+        await cart.expectProductInCart(PRODUCT);
         await cart.startCheckout();
 
         await checkout.expectOnStepOne();
@@ -93,19 +86,16 @@ test.describe("Checkout flow", () => {
     });
 
 
-    test("User can checkout and complete order", async ({ login, product, cart, checkout }) => {
+    test("@smoke User can checkout and complete order", async ({ login, product, cart, checkout }) => {
 
 
         await login.goto();
-        await login.login(CREDS.user, CREDS.pass);
+        await login.loginAndExpectSuccess(CREDS.user, CREDS.pass);
 
-        await product.expectOnPage();
-
-        const name = "Sauce Labs Backpack";
-        await product.addItemTocartByName(name);
+        await product.addItemTocartByName(PRODUCT);
         await product.expectCartBadgeCount(1);
         await cart.gotoCart();
-        await cart.expectProductIncart(name);
+        await cart.expectProductInCart(PRODUCT);
         await cart.startCheckout();
 
         await checkout.expectOnStepOne();

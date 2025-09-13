@@ -1,4 +1,3 @@
-// web-tests/tests/network-mocking-demo.spec.ts
 import { test, expect } from "@playwright/test";
 
 test.describe("Mock test", () => {
@@ -12,10 +11,8 @@ test.describe("Mock test", () => {
       });
     });
 
-    // Navigate to establish an origin (so /api/demo is a valid URL)
     await page.goto("/");
 
-    // Trigger a fetch from the page to the mocked endpoint
     const response = await page.evaluate(async () => {
       const res = await fetch("/api/demo");
       return res.json();
@@ -33,7 +30,6 @@ test.describe("Mock test", () => {
       });
     });
 
-    // Establish origin
     await page.goto("/");
 
     const response = await page.evaluate(async () => {

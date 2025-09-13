@@ -10,5 +10,8 @@ class APIClient:
         if "timeout" not in kwargs:
             kwargs["timeout"] = self.timeout
         return requests.get(url, **kwargs)
+    
+    def get_pokemon(self, name: str):
+        return self.get(f"/pokemon/{name}")
 
 

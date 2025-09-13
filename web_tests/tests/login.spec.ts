@@ -1,8 +1,8 @@
-import { test, expect } from "fixtures/pom_fixtures";
+import { test, expect } from "@fixtures/pom_fixtures";
 import { CREDS } from "helpers/creds";
 
 test.describe("Login flow", () => {
-    test("user can log in to saucedemo", async ({ login, product }) => {
+    test("@smoke user can log in to saucedemo", async ({ login, product }) => {
         await test.step("login", async () => {
 
             await login.goto();
@@ -11,7 +11,7 @@ test.describe("Login flow", () => {
         });
     });
 
-    test("user can log out from the products page", async ({ login, product }) => {
+    test("@smoke user can log out from the products page", async ({ login, product }) => {
 
         await login.goto();
         await login.login(CREDS.user, CREDS.pass);

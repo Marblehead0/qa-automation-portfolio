@@ -42,9 +42,10 @@
     "moduleDetection": "force",
     "skipLibCheck": true,
     "paths":{
-      "pages/*":["pages/*"],
-      "fixtures/*":["fixtures/*"],
-      "helpers/*":["helpers/*"]
+      "@utils/*":["utils/*"],
+      "@pages/*":["pages/*"],
+      "@fixtures/*":["fixtures/*"],
+      "@helpers/*":["helpers/*"]
     }
   },
     "include": ["**/*.ts"]
