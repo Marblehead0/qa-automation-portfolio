@@ -50,8 +50,14 @@ def temp_user(api_client):
     except Exception:
         pass
 
+def _resolve_env(name: str, default: str) -> str:
+    val = (os.getenv(name) or "").strip()
+    return val if val else default
+
 @pytest.fixture(scope="session")
 def api_client():
-    base_url = os.getenv("API_BASE_URL", urls[env])
-    token = os.getenv("API_TOKEN")
+    base_url = _resolve_env("API_BASE_URL", "https://pokeapi.co/api/v2")
+    token = (os.getenv("API_TOKEN") or "").strip() or None
+    # Optional: log for debugging
+    print(f"[api] Base URL: {base_url}")
     return APIClient(base_url, token=token)

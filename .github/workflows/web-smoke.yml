@@ -31,6 +31,8 @@ jobs:
           npm ci
           npx playwright install --with-deps
 
+      - name: Ensure BASE_URL default
+        run: echo "BASE_URL=${BASE_URL:-https://www.saucedemo.com/}" >> $GITHUB_ENV
       # Optional: env for demo creds (remove if not needed)
       - name: Set demo creds
         run: |

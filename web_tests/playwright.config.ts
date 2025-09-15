@@ -11,6 +11,12 @@ const urls: Record<string, string> = {
   prod: "https://saucedemo.com",
 };
 
+
+function resolveBaseURL() {
+  const raw = process.env.BASE_URL?.trim();
+  return raw && raw.length > 0 ? raw : "https://www.saucedemo.com/";
+}
+
 export default defineConfig({
 
  globalSetup: require.resolve("./global-setup"),
@@ -21,7 +27,7 @@ export default defineConfig({
   expect: { timeout: 5000 }, 
   reporter: [['html', {open: 'never'}]],
   use: {
-    baseURL: process.env.BASE_URL ?? urls[env],
+    baseURL: resolveBaseURL(),
     headless : true,
     actionTimeout: 10000,            
     navigationTimeout: 15000,
