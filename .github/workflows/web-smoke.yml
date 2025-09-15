@@ -32,7 +32,7 @@ jobs:
           echo "PASSWORD=secret_sauce" >> $GITHUB_ENV
 
       - name: Run smoke tests (HTML report)
-        run: npx playwright test -g "@smoke" --reporter=html
+        run: npx playwright test -g "@smoke" --reporter=html --project=chromium
 
       - name: Upload Playwright report (artifact for deploy workflow)
         if: always()

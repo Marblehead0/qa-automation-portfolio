@@ -1,10 +1,15 @@
 import { test, expect } from "@fixtures/pom_fixtures";
 import { CREDS } from "@helpers/creds";
+import { blockAnalytics } from "@utils/network";
+import {blockImages} from "@utils/network";
 
 
 test.describe("Checkout flow", () => {
 const PRODUCT = "Sauce Labs Backpack";
-    test("@smoke happy path: login, add to cart, checkout, complete", async ({ login, product, cart, checkout }) => {
+    test("@smoke happy path: login, add to cart, checkout, complete", async ({ login, product, cart, checkout,consoleErrors,page }) => {
+        await blockAnalytics(page);
+        await blockImages(page);
+
         await test.step("login", async () => {
             await login.goto();
             await login.loginAndExpectSuccess(CREDS.user, CREDS.pass);
@@ -28,6 +33,8 @@ const PRODUCT = "Sauce Labs Backpack";
             await checkout.finish();
             await checkout.expectOrderComplete();
         });
+
+        expect(consoleErrors, "No console errors should appear").toEqual([]);
     });
 
     test("@regression checkout blocks when ZIP is missing", async ({ login, product, cart, checkout }) => {
@@ -84,7 +91,6 @@ const PRODUCT = "Sauce Labs Backpack";
         await checkout.expectOnStepOne();
         await checkout.expectErrorContains("Last Name is required");
     });
-
 
     test("@smoke User can checkout and complete order", async ({ login, product, cart, checkout }) => {
 

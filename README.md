@@ -108,15 +108,13 @@ npx playwright test --grep @regression
 
 API tests → on push & PR
 
-Smoke tests → on push
+Smoke tests → on push, Chromium only
 
-Regression tests → on PR & main
+Regression tests → on PR & main, Chromium + Firefox + WebKit (matrix)
 
 Reports deployed to GitHub Pages under /docs/.
 
 # ✅ Status Badges
-
-## ✅ Status Badges
 
 [![API Tests](https://github.com/Marblehead0/qa-automation-portfolio/actions/workflows/api_tests.yml/badge.svg)](https://github.com/Marblehead0/qa-automation-portfolio/actions/workflows/api_tests.yml)  
 [![Web Smoke Tests](https://github.com/Marblehead0/qa-automation-portfolio/actions/workflows/web-smoke.yml/badge.svg)](https://github.com/Marblehead0/qa-automation-portfolio/actions/workflows/web-smoke.yml)  
@@ -177,6 +175,13 @@ docker-compose run --rm web-regression
 Generates Playwright HTML report → web_tests/playwright-report/index.html
 
 Saves artifacts → web_tests/test-results/
+
+# 🛡️ Resilience Patterns (Playwright)
+- Locator-based waits (`expect(locator).toBeVisible()`) instead of sleeps
+- URL waits (`await expect(page).toHaveURL(/inventory\.html/)`)
+- Console error capture per test (fails if any JS `console.error`)
+- Network controls: block 3rd-party analytics; mock API responses where needed
+
 
 
 

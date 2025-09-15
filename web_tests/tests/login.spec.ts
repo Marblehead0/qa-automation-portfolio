@@ -22,10 +22,12 @@ test.describe("Login flow", () => {
         await login.expectOnPage();
     });
 
-    test("@regression shows error for invalid credentials", async ({ login }) => {
+    test("@regression shows error for invalid credentials", async ({ login,consoleErrors }) => {
         await login.goto();
         await login.login(CREDS.user, "wrong");
         await login.expectErrorContains("Username and password do not match");
+
+        expect(consoleErrors, "No console errors during failed login").toEqual([]);
     });
 
 });

@@ -3,10 +3,20 @@ name: Web Regression Tests
 on:
   pull_request:
 
+    
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   web-regression:
-    name: Web (Playwright Regression)
+    name: Regression (${{ matrix.browser }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+    
     defaults:
       run:
         working-directory: web_tests
@@ -20,20 +30,35 @@ jobs:
         with:
           node-version: "20"
 
+      - name: Cache npm
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('web-tests/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
+
       - name: Install deps & browsers
         run: |
           npm ci
           npx playwright install --with-deps
 
-      - name: Run regression tests (HTML report)
-        run: npx playwright test -g "@regression" --reporter=html
+      - name: Run regression tests (${{ matrix.browser }})
+        run: npx playwright test -g "@regression" --reporter=html --project=${{ matrix.browser }}
 
-      - name: Upload Playwright report (artifact for deploy workflow)
+      - name: Upload Playwright report (${{ matrix.browser }})
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: web-regression-report
+          name: web-regression-report ${{ matrix.browser }}
           path: web_tests/playwright-report
+
+      - name: Upload test results (${{ matrix.browser }})
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-regression-test-results-${{ matrix.browser }}
+          path: web-tests/test-results
 
       - name: Upload traces/screenshots/videos
         if: always()

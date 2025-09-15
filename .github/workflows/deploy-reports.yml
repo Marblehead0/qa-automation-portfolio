@@ -32,11 +32,29 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
         continue-on-error: true
 
-      - name: Download regression report (if present)
+      - name: Download regression report (if present,chromium)
         uses: actions/download-artifact@v4
         with:
-          name: web-regression-report
-          path: docs/web-regression-report
+          name: web-regression-report-chromium
+          path: docs/web-regression-report/chromium
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
+
+      - name: Download regression report (if present,firefox)
+        uses: actions/download-artifact@v4
+        with:
+          name: web-regression-report-firefox
+          path: docs/web-regression-report/firefox
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
+
+      - name: Download regression report (if present,webkit)
+        uses: actions/download-artifact@v4
+        with:
+          name: web-regression-report-webkit
+          path: docs/web-regression-report/webkit
           run-id: ${{ github.event.workflow_run.id }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
         continue-on-error: true
@@ -76,7 +94,6 @@ jobs:
                 with open(path, "w", encoding="utf-8") as f:
                         f.write(textwrap.dedent(html))
             PY
-
 
 
       - name: Commit and push changes
