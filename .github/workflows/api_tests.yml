@@ -9,6 +9,10 @@ jobs:
     name: API (pytest)
     runs-on: ubuntu-latest
 
+    env:
+      API_BASE_URL: ${{ secrets.API_BASE_URL }}  
+      API_TOKEN: ${{ secrets.API_TOKEN }} 
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -50,3 +54,4 @@ jobs:
         with:
           files: coverage.xml
           fail_ci_if_error: true
+          token: ${{ secrets.CODECOV_TOKEN }} # required for private repos (optional for public)

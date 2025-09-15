@@ -38,25 +38,20 @@ Artifacts uploaded (reports, traces, screenshots, coverage)
 Badges → Build Status + Code Coverage
 
 # 📂 Project Structure
-qa-automation-portfolio/
-├── api_tests/
-│   ├── tests/                # API test cases
-│   ├── conftest.py           # Shared fixtures
-│   └── pytest.ini            # Pytest config
-├── web_tests/
-│   ├── tests/                # UI test cases
-│   ├── pages/                # Page Object Model
-│   ├── playwright.config.ts  # Playwright config
-│   └── tsconfig.json         # Path aliases
-├── .github/
-│   └── workflows/            # CI/CD workflows
-├── docs/                     # Screenshots & published reports
-├── reports/                  # Local test reports
-├── requirements.txt          # Python deps
-├── package.json              # Node deps
-└── README.md
 
-# ⚙️ Usage
+![Folder Structure](docs/folder_structure.png)
+
+# ⚙️ Setup & Usage
+
+🔹 Environment Setup
+# Copy the example environment file
+cp .env.example .env
+
+# Edit `.env` with your own values (e.g. BASE_URL, USERNAME, PASSWORD)
+
+ℹ️ Note: `.env` is for **local runs** only.  
+In **CI (GitHub Actions)**, environment variables are injected via **GitHub Secrets** — see `.github/workflows/`.
+---
 
 # Run API Tests
 🔹 Install Python dependencies
@@ -80,6 +75,27 @@ npx playwright test --grep @smoke
 🔹 Run regression tests only
 npx playwright test --grep @regression
 
+# 🌍 Running Against Different Environments
+
+By default, tests run against the local demo environment.
+You can switch targets using the ENV variable:
+
+🔹 Run Web tests against staging
+ENV=staging npx playwright test
+
+🔹 Run API tests against staging
+ENV=staging python -m pytest api_tests
+
+🔹 Run against production
+ENV=prod npx playwright test
+
+## Environment resolution order:
+
+1. If BASE_URL or API_BASE_URL is explicitly set
+   (via .env or GitHub Secrets) → use that
+2. Else, check ENV (local | staging | prod) → map to known URLs
+3. Else, fall back to local defaults
+   (SauceDemo / PokeAPI)
 
 
 # 📊 Sample Reports & Screenshots
@@ -182,6 +198,6 @@ Saves artifacts → web_tests/test-results/
 - Console error capture per test (fails if any JS `console.error`)
 - Network controls: block 3rd-party analytics; mock API responses where needed
 
-
+📌 See [Flake Triage Guide](docs/flake-triage.md) for how we handle flaky tests.
 
 

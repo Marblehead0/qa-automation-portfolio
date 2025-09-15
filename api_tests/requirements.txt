@@ -3,3 +3,5 @@ requests
 pytest-cov
 pytest-html
 jsonschema
+pytest-xdist>=3.6.1
+python-dotenv

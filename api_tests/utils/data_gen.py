@@ -1,16 +1,3 @@
-# api_tests/utils/data_gen.py
-"""
-Deterministic test-data generator for API tests.
-
-Usage:
-    from utils.data_gen import DataGen
-
-    dg = DataGen("signup1")
-    email = dg.email()
-    username = dg.username()
-    order_id = dg.int_range(1000, 9999)
-"""
-
 from __future__ import annotations
 import hashlib
 import random
@@ -20,7 +7,6 @@ from typing import Optional
 
 
 class DataGen:
-    """Seeded generator so the same seed yields the same values every run."""
 
     def __init__(self, seed: str | int = "default") -> None:
         # Do NOT touch global RNG; keep a private RNG
@@ -47,10 +33,6 @@ class DataGen:
         return self._rng.randint(lo, hi)
 
     def uuid_deterministic(self, namespace: Optional[uuid.UUID] = None, name: Optional[str] = None) -> str:
-        """
-        Deterministic UUID (v5) based on current RNG state + optional namespace/name.
-        Useful for idempotent resource keys in tests.
-        """
         ns = namespace or uuid.NAMESPACE_URL
         nm = name or f"{self.letters(6)}-{self.digits(4)}"
         return str(uuid.uuid5(ns, nm))

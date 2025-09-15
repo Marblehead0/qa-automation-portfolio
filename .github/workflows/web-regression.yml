@@ -21,6 +21,11 @@ jobs:
       run:
         working-directory: web_tests
 
+    env:
+      USERNAME: ${{ secrets.E2E_USERNAME }}
+      PASSWORD: ${{ secrets.E2E_PASSWORD }}
+      BASE_URL: ${{ secrets.BASE_URL }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4

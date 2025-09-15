@@ -2,6 +2,24 @@
 import pytest
 from .utils.api_client import APIClient
 from api_tests.utils.data_gen import DataGen
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+BASE = os.getenv("API_BASE_URL", "https://pokeapi.co/api/v2")
+TOKEN = os.getenv("API_TOKEN") 
+
+env = os.getenv("ENV", "local")
+
+urls = {
+    "local": "https://pokeapi.co/api/v2",
+    "staging": os.getenv("STAGING_API_URL", "https://staging.example.com/api"),
+    "prod": os.getenv("PROD_API_URL", "https://prod.example.com/api"),
+}
+
+# pass into your client as needed
+client = APIClient(BASE, token=TOKEN)
 
 @pytest.fixture(scope="session")
 def base_url() -> str:
@@ -32,7 +50,8 @@ def temp_user(api_client):
     except Exception:
         pass
 
-@pytest.fixture
-def api_client(pokeapi_client):
-    yield pokeapi_client
-
+@pytest.fixture(scope="session")
+def api_client():
+    base_url = os.getenv("API_BASE_URL", urls[env])
+    token = os.getenv("API_TOKEN")
+    return APIClient(base_url, token=token)
