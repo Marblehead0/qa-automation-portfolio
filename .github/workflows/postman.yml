@@ -58,33 +58,33 @@ jobs:
 
       - name: Check reporter installed
         run: npx --yes newman-reporter-htmlextra --version
-
-      - name: Preflight PokeAPI
-        env:
-          BASE_URL: ${{ secrets.API_BASE_URL }}
+        
+      - name: Decide BASE_URL (fallback to Prism)
+        id: base
         run: |
-          # Fallback to public PokeAPI if secret not set
-          if [ -z "$BASE_URL" ]; then BASE_URL="https://pokeapi.co/api/v2"; fi
-          echo "Checking $BASE_URL/pokemon?limit=1 ..."
-          code=$(curl -s -H "Accept: application/json" -H "User-Agent: qa-automation-portfolio-ci" \
-                 -o /tmp/poke.json -w "%{http_code}" "$BASE_URL/pokemon?limit=1" || true)
-          echo "HTTP $code"
-          if [ "$code" -lt 200 ] || [ "$code" -ge 300 ]; then
-            echo "::error ::PokeAPI preflight failed (HTTP $code)"
-            head -c 500 /tmp/poke.json || true
-            exit 1
+          if [ -z "${{ secrets.API_BASE_URL }}" ]; then
+            echo "No API_BASE_URL provided; starting Prism mock on :4010"
+            npx --yes @stoplight/prism-cli@5 mock api/spec/openapi.yaml -p 4010 &
+            echo $! > prism.pid
+            for i in {1..30}; do nc -z localhost 4010 && break || sleep 1; done
+            echo "base_url=http://localhost:4010" >> $GITHUB_OUTPUT
+          else
+            echo "base_url=${{ secrets.API_BASE_URL }}" >> $GITHUB_OUTPUT
           fi
-          # expose resolved base for the next step
-          echo "BASE_URL=$BASE_URL" >> $GITHUB_ENV
 
-      - name: Run Newman (PokeAPI smoke)
+      - name: Run Newman
         run: |
           mkdir -p reports/postman
           npx newman run postman/collection.json \
-            --env-var BASE_URL="$BASE_URL" \
+            --env-var BASE_URL="${{ steps.base.outputs.base_url }}" \
             -r htmlextra \
             --reporter-htmlextra-export reports/postman/report.html \
             --verbose
+
+      - name: Stop Prism
+        if: always()
+        run: |
+          if [ -f prism.pid ]; then kill $(cat prism.pid) || true; fi
 
       - name: Upload Postman report
         uses: actions/upload-artifact@v4

@@ -1,0 +1,8 @@
+{
+  "service": "health.HealthService",
+  "method": "Check",
+  "input": { "equals": {} },
+  "output": {
+    "data": { "status": "SERVING" }
+  }
+}

@@ -1,0 +1,13 @@
+syntax = "proto3";
+package health;
+
+// A minimal demo service for portfolio purposes
+service HealthService {
+  rpc Check (HealthRequest) returns (HealthResponse) {}
+}
+
+message HealthRequest {}
+
+message HealthResponse {
+  string status = 1; // "SERVING" | "NOT_SERVING"
+}

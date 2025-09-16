@@ -1,0 +1,66 @@
+openapi: 3.0.3
+info:
+  title: QA Portfolio Mock API
+  version: 0.1.0
+servers:
+  - url: http://localhost:4010
+paths:
+  /pokemon:
+    get:
+      summary: List Pokemon (mocked)
+      parameters:
+        - in: query
+          name: limit
+          schema: { type: integer, minimum: 0, maximum: 20, default: 1 }
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [results]
+                properties:
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      required: [name, url]
+                      properties:
+                        name: { type: string, example: bulbasaur }
+                        url:  { type: string, example: https://pokeapi.co/api/v2/pokemon/1/ }
+              examples:
+                single:
+                  summary: limit=1
+                  value:
+                    results:
+                      - name: bulbasaur
+                        url: https://pokeapi.co/api/v2/pokemon/1/
+  /pokemon-species/bulbasaur:
+    get:
+      summary: Species details (mocked)
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [name, base_happiness, capture_rate, color]
+                properties:
+                  name: { type: string, example: bulbasaur }
+                  base_happiness: { type: integer, example: 50 }
+                  capture_rate: { type: integer, example: 45 }
+                  color:
+                    type: object
+                    required: [name, url]
+                    properties:
+                      name: { type: string, example: green }
+                      url:  { type: string, example: https://pokeapi.co/api/v2/pokemon-color/5/ }
+              example:
+                name: bulbasaur
+                base_happiness: 50
+                capture_rate: 45
+                color:
+                  name: green
+                  url: https://pokeapi.co/api/v2/pokemon-color/5/
