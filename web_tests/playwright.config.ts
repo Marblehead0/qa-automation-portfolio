@@ -22,8 +22,9 @@ export default defineConfig({
  globalSetup: require.resolve("./global-setup"),
 
 
-  retries: 1,
-  workers: process.env.CI ? 2 : 4,
+  retries: process.env.CI ? 1 : 0,
+  workers: process.env.CI ? 2 : undefined,
+  
   expect: { timeout: 5000 }, 
   reporter: [['html', {open: 'never'}]],
   use: {

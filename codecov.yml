@@ -1,0 +1,9 @@
+coverage:
+  status:
+    project:
+      default:
+        target: 80%     # your goal
+        threshold: 2%   # allow small dips without failing PR
+comment:
+  layout: "reach, diff, flags, files"
+  behavior: default

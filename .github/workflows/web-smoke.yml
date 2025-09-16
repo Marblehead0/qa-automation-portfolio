@@ -2,6 +2,13 @@ name: Web Smoke Tests
 
 on:
   push:
+    paths:
+      - "web_tests/**"
+      - ".github/workflows/web-smoke.yml"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   web-smoke:
@@ -10,39 +17,39 @@ jobs:
     defaults:
       run:
         working-directory: web_tests
-
     env:
       USERNAME: ${{ secrets.E2E_USERNAME }}
       PASSWORD: ${{ secrets.E2E_PASSWORD }}
       BASE_URL: ${{ secrets.BASE_URL }}
 
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "20" }
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - name: Cache npm
+        uses: actions/cache@v4
         with:
-          node-version: "20"
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('web_tests/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
 
       - name: Install deps & browsers
         run: |
           npm ci
           npx playwright install --with-deps
 
-      - name: Ensure BASE_URL default
-        run: echo "BASE_URL=${BASE_URL:-https://www.saucedemo.com/}" >> $GITHUB_ENV
-      # Optional: env for demo creds (remove if not needed)
-      - name: Set demo creds
+      - name: Ensure env defaults
         run: |
-          echo "USERNAME=standard_user" >> $GITHUB_ENV
-          echo "PASSWORD=secret_sauce" >> $GITHUB_ENV
+          echo "BASE_URL=${BASE_URL:-https://www.saucedemo.com/}" >> $GITHUB_ENV
+          echo "USERNAME=${USERNAME:-standard_user}" >> $GITHUB_ENV
+          echo "PASSWORD=${PASSWORD:-secret_sauce}" >> $GITHUB_ENV
 
-      - name: Run smoke tests (HTML report)
+      - name: Run smoke tests (Chromium)
         run: npx playwright test -g "@smoke" --reporter=html --project=chromium
 
-      - name: Upload Playwright report (artifact for deploy workflow)
+      - name: Upload Playwright report
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -50,7 +57,7 @@ jobs:
           path: web_tests/playwright-report
 
       - name: Upload traces/screenshots/videos
-        if: always()
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: web-smoke-test-results

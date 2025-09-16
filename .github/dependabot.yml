@@ -1,0 +1,41 @@
+# .github/dependabot.yml
+version: 2
+updates:
+  # --- NPM dependencies for Playwright tests ---
+  - package-ecosystem: "npm"
+    directory: "/web_tests"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "chore(web_tests): "
+    labels:
+      - "dependencies"
+      - "npm"
+    reviewers:
+      - "Marblehead0"
+
+  # --- Python dependencies for API tests ---
+  - package-ecosystem: "pip"
+    directory: "/api_tests"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "chore(api_tests): "
+    labels:
+      - "dependencies"
+      - "python"
+    reviewers:
+      - "Marblehead0"
+
+  # --- GitHub Actions dependencies (actions/checkout, setup-node, etc.) ---
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "chore(ci): "
+    labels:
+      - "dependencies"
+      - "ci"
+    reviewers:
+      - "Marblehead0"
