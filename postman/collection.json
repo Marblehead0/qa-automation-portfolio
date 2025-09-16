@@ -1,0 +1,61 @@
+{
+  "info": {
+    "name": "QA Portfolio API (PokeAPI)",
+    "_postman_id": "replace-me",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "PokeAPI smoke",
+      "request": {
+        "method": "GET",
+        "url": "{{BASE_URL}}/pokemon?limit=1",
+        "header": [
+          { "key": "Accept", "value": "application/json" },
+          { "key": "User-Agent", "value": "qa-automation-portfolio-ci" }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status 200', function () { pm.response.to.have.status(200); });",
+              "const json = pm.response.json();",
+              "pm.test('has results array', function () { pm.expect(json.results).to.be.an('array'); });",
+              "pm.test('limit respected (<=1)', function () { pm.expect(json.results.length).to.be.at.most(1); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Pokemon species - Bulbasaur",
+      "request": {
+        "method": "GET",
+        "url": "{{BASE_URL}}/pokemon-species/bulbasaur",
+        "header": [
+          { "key": "Accept", "value": "application/json" },
+          { "key": "User-Agent", "value": "qa-automation-portfolio-ci" }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status 200', function () { pm.response.to.have.status(200); });",
+              "const json = pm.response.json();",
+              "pm.test('name is bulbasaur', function () { pm.expect(json.name).to.eql('bulbasaur'); });",
+              "pm.test('has base_happiness', function () { pm.expect(json).to.have.property('base_happiness'); });",
+              "pm.test('has capture_rate', function () { pm.expect(json).to.have.property('capture_rate'); });",
+              "pm.test('has color object', function () { pm.expect(json.color).to.be.an('object'); });"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+[
+  {
+    "service": "health.HealthService",
+    "method": "Check",
+    "input": {},
+    "output": { "status": "SERVING" }
+  }
+]

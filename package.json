@@ -1,0 +1,14 @@
+{
+  "name": "qa-automation-portfolio-tools",
+  "private": true,
+  "devDependencies": {
+    "@stoplight/prism-cli": "^5.9.0",
+    "newman": "^6.2.0",
+    "newman-reporter-htmlextra": "^1.23.1",
+    "mkdirp": "^3.0.1"
+  },
+"scripts": {
+"mock:api": "prism mock api/spec/openapi.yaml -p 4010",
+  "postman:run": "mkdirp reports/postman && newman run postman/collection.json -e postman/local.postman_environment.json -r htmlextra --reporter-htmlextra-export reports/postman/report.html --verbose"
+}
+}

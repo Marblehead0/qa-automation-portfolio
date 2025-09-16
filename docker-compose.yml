@@ -26,3 +26,22 @@ services:
     volumes:
       - .:/app
     command: ["npx", "playwright", "test", "-g", "@regression", "--reporter=html"]
+
+  grpc-mock:
+    image: bavix/gripmock:latest
+    command: ["--stub=/stubs", "/protos/health.proto"]
+    ports:
+      - "4770:4770"   # gRPC server
+      - "4771:4771"   # admin/UI
+    volumes:
+      - ./protos:/protos:ro
+      - ./protos/stubs:/stubs:ro
+
+  prism:
+    image: stoplight/prism:5
+    command: ["mock", "-h", "0.0.0.0", "/spec/openapi.yaml"]
+    ports:
+      - "4010:4010"
+    volumes:
+      - ./api/spec:/spec:ro
+
