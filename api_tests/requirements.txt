@@ -7,3 +7,4 @@ pytest-xdist>=3.6.1
 python-dotenv
 grpcio==1.66.1
 grpcio-tools==1.66.1
+protobuf==6.31.1
