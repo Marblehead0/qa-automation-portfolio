@@ -1,0 +1,11 @@
+{
+  "name": "qa-automation-portfolio-tools",
+  "private": true,
+  "devDependencies": {
+    "newman": "^6.2.0",
+    "newman-reporter-htmlextra": "^1.23.1"
+  },
+"scripts": {
+  "postman:run": "mkdirp reports/postman && newman run postman/collection.json -e postman/local.postman_environment.json -r htmlextra --reporter-htmlextra-export reports/postman/report.html --verbose"
+}
+}
