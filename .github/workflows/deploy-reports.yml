@@ -24,7 +24,7 @@ jobs:
           ref: main
 
       - name: Download smoke report (if present)
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: web-smoke-report
           path: docs/web-smoke-report
@@ -33,7 +33,7 @@ jobs:
         continue-on-error: true
 
       - name: Download regression report (if present,chromium)
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: web-regression-report-chromium
           path: docs/web-regression-report/chromium
@@ -42,7 +42,7 @@ jobs:
         continue-on-error: true
 
       - name: Download regression report (if present,firefox)
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: web-regression-report-firefox
           path: docs/web-regression-report/firefox
@@ -51,7 +51,7 @@ jobs:
         continue-on-error: true
 
       - name: Download regression report (if present,webkit)
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: web-regression-report-webkit
           path: docs/web-regression-report/webkit
