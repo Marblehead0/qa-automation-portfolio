@@ -59,30 +59,27 @@ jobs:
       - name: Check reporter installed
         run: npx --yes newman-reporter-htmlextra --version
 
-      - name: Preflight API check
+      - name: Preflight PokeAPI
         env:
           BASE_URL: ${{ secrets.API_BASE_URL }}
         run: |
-          if [ -z "$BASE_URL" ]; then
-            echo "::error ::API_BASE_URL secret is empty."
-            exit 1
-          fi
-          echo "Hitting $BASE_URL/health ..."
-          # Don’t show body if sensitive; we just validate status code
-          code=$(curl -s -o /tmp/health.json -w "%{http_code}" "$BASE_URL/health" || true)
+          # Fallback to public PokeAPI if secret not set
+          if [ -z "$BASE_URL" ]; then BASE_URL="https://pokeapi.co/api/v2"; fi
+          echo "Checking $BASE_URL/pokemon?limit=1 ..."
+          code=$(curl -s -H "Accept: application/json" -H "User-Agent: qa-automation-portfolio-ci" \
+                 -o /tmp/poke.json -w "%{http_code}" "$BASE_URL/pokemon?limit=1" || true)
           echo "HTTP $code"
           if [ "$code" -lt 200 ] || [ "$code" -ge 300 ]; then
-            echo "::error ::Health endpoint returned HTTP $code"
-            cat /tmp/health.json || true
+            echo "::error ::PokeAPI preflight failed (HTTP $code)"
+            head -c 500 /tmp/poke.json || true
             exit 1
           fi
+          # expose resolved base for the next step
+          echo "BASE_URL=$BASE_URL" >> $GITHUB_ENV
 
-      - name: Run Newman (inject env directly)
-        env:
-          BASE_URL: ${{ secrets.API_BASE_URL }}
+      - name: Run Newman (PokeAPI smoke)
         run: |
           mkdir -p reports/postman
-          # Add --verbose for richer logs; remove if too chatty
           npx newman run postman/collection.json \
             --env-var BASE_URL="$BASE_URL" \
             -r htmlextra \
