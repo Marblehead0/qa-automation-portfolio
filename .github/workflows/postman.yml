@@ -1,0 +1,66 @@
+name: API (Postman)
+
+on:
+  push:
+    paths:
+      - "postman/**"
+      - ".github/workflows/postman.yml"
+      - "api_tests/**"
+  pull_request:
+    paths:
+      - "postman/**"
+      - ".github/workflows/postman.yml"
+      - "api_tests/**"
+
+permissions:
+  contents: read
+
+jobs:
+  postman:
+    runs-on: ubuntu-latest
+    env:
+      BASE_URL: ${{ secrets.API_BASE_URL }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            **/node_modules
+          key: ${{ runner.os }}-postman-${{ hashFiles('package-lock.json', 'package.json') }}
+
+      - name: Install deps
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm i --no-fund --no-audit
+          fi
+
+      - name: Prepare CI Postman env
+        run: |
+          mkdir -p postman
+          # Inject BASE_URL into a CI environment file
+          jq --arg base "$BASE_URL" \
+             '(.values // []) as $v | {name:"CI", values: ($v | map(if .key=="BASE_URL" then .value=$base | .enabled=true else . end))}' \
+             postman/local.postman_environment.json > postman/ci_env.json
+
+      - name: Run Newman
+        run: |
+          mkdir -p reports/postman
+          npx newman run postman/collection.json \
+            -e postman/ci_env.json \
+            -r htmlextra \
+            --reporter-htmlextra-export reports/postman/report.html
+
+      - name: Upload Postman report
+        uses: actions/upload-artifact@v4
+        with:
+          name: postman-report
+          path: reports/postman/report.html
