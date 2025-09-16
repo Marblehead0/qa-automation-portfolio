@@ -51,13 +51,43 @@ jobs:
              '(.values // []) as $v | {name:"CI", values: ($v | map(if .key=="BASE_URL" then .value=$base | .enabled=true else . end))}' \
              postman/local.postman_environment.json > postman/ci_env.json
 
-      - name: Run Newman
+      - name: Verify collection present
+        run: |
+          ls -lah postman || true
+          test -f postman/collection.json
+
+      - name: Check reporter installed
+        run: npx --yes newman-reporter-htmlextra --version
+
+      - name: Preflight API check
+        env:
+          BASE_URL: ${{ secrets.API_BASE_URL }}
+        run: |
+          if [ -z "$BASE_URL" ]; then
+            echo "::error ::API_BASE_URL secret is empty."
+            exit 1
+          fi
+          echo "Hitting $BASE_URL/health ..."
+          # Don’t show body if sensitive; we just validate status code
+          code=$(curl -s -o /tmp/health.json -w "%{http_code}" "$BASE_URL/health" || true)
+          echo "HTTP $code"
+          if [ "$code" -lt 200 ] || [ "$code" -ge 300 ]; then
+            echo "::error ::Health endpoint returned HTTP $code"
+            cat /tmp/health.json || true
+            exit 1
+          fi
+
+      - name: Run Newman (inject env directly)
+        env:
+          BASE_URL: ${{ secrets.API_BASE_URL }}
         run: |
           mkdir -p reports/postman
+          # Add --verbose for richer logs; remove if too chatty
           npx newman run postman/collection.json \
-            -e postman/ci_env.json \
+            --env-var BASE_URL="$BASE_URL" \
             -r htmlextra \
-            --reporter-htmlextra-export reports/postman/report.html
+            --reporter-htmlextra-export reports/postman/report.html \
+            --verbose
 
       - name: Upload Postman report
         uses: actions/upload-artifact@v4
